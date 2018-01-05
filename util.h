@@ -23,8 +23,6 @@ typedef struct {
     int port;               /* server port number */
 } global_configs;
 
-typedef void (*sighandler_t)(int);
-
 /*
  输入:工作路径
  功能:设置程序后台工作

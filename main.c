@@ -95,17 +95,7 @@ int start_receiver(int fd)
 
 
 
-int start_controller(int fd)
-{
-    if (pthread_create(&tcps,&attr,its_controller,&fd)) {
-        printf("create thread failed.");
-        close_socket(fd);
-        exit(1);
-    } else {
-        printf("rec thread started.\r\n");
-    }
-    return (int)tcps;
-}
+
 
 
 static void *its_controller(void *param)
@@ -129,6 +119,18 @@ static void *its_controller(void *param)
     }
     printf("receiver exit.\r\n");
     return NULL;
+}
+
+int start_controller(int fd)
+{
+    if (pthread_create(&tcps,&attr,its_controller,&fd)) {
+        printf("create thread failed.");
+        close_socket(fd);
+        exit(1);
+    } else {
+        printf("rec thread started.\r\n");
+    }
+    return (int)tcps;
 }
 
 
