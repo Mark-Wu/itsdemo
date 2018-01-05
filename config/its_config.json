@@ -1,0 +1,7 @@
+{
+  "licence":"BX7yLAkGcbWzkpVv3ch9Ljlu+fRCY_DX",
+  "name":"Wuhu PSB ITS",
+  "log path":"/var/run/ITS_app.log",
+  "server":"128.64.130.224",
+  "port":2012
+}
