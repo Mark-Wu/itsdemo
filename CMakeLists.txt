@@ -5,6 +5,7 @@ set(CMAKE_C_STANDARD 99)
 find_package(Threads)
 
 
-set(SOURCE_FILES main.c util.c util.h client.h client.c its_interface.h its_interface.c jRead.c )
+set(SOURCE_FILES main.c util.c util.h client.h client.c its_interface.h its_interface.c jRead.c its_ctl.c forwarding.c queue_list.c)
 add_executable(ITSdemo ${SOURCE_FILES})
 target_link_libraries(ITSdemo ${CMAKE_THREAD_LIBS_INIT})
+add_executable(its-ctl its-ctl/control.c)

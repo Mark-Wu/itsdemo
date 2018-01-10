@@ -4,6 +4,13 @@
 
 #include "its_interface.h"
 
+
+#define SITE_STATUS_FLAG                0b111011
+#define SITE_DEFAULT_DATA_TYPE          0b1100001100111111
+#define SITE_SPECIFIC_DATA_TYPE         0b1000001100111111
+
+
+
 size_t create_licence_validate_request_package(uint8_t *pbuffer,size_t max_size,const char *licence,const char *username)
 {
     size_t name_length = 0;
@@ -81,11 +88,57 @@ size_t create_dwell_package(uint8_t *pbuffer,size_t max_size)
 }
 
 
+size_t create_site_status_package(uint8_t *pbuffer,size_t max_size,uint16_t site_id[],uint8_t count)
+{
+    size_t  length;
+    int i;
+    site_status_req *pheader = (site_status_req *)pbuffer;
+    pheader->msg_header.type = 32;
+    pheader->flags = SITE_STATUS_FLAG;
+    pheader->default_data_type = htons(SITE_DEFAULT_DATA_TYPE);
+    for(i = 0 ; i < count; i ++ ){
+        pheader->sites_info[i].site_id = htons(site_id[i]);
+        pheader->sites_info[i].specific_type = htons(SITE_SPECIFIC_DATA_TYPE);
+    }
+    length = sizeof(site_status_req) + count * sizeof(site_info);
+    pheader->msg_header.length = htons((uint16_t)(length-2));
+    printf(" site status length : %d \r\n ",length);
+    return length;
+}
+
+size_t create_detector_count_pacakge(uint8_t *pbuffer,size_t max_size)
+{
+    detector_count_req *pheader = (detector_count_req *)pbuffer;
+    pheader->msg_header.type = DETECTOR_COUNT;
+    pheader->msg_header.length = htons(0x02);
+    pheader->flag =0x01;
+    printf("detector count package size:%d\r\n",sizeof(detector_count_req));
+    return sizeof(detector_count_req);
+}
+size_t create_strategic_monitor_pacakge(uint8_t *pbuffer,size_t max_size)
+{
+    strategic_monitor_req *pheader = (strategic_monitor_req *)pbuffer;
+    pheader->msg_header.type = STRATEGIC_MONITOR;
+    pheader->flag = 0b11;
+   // pheader->region_name =
+
+
+
+    return 0;
+}
+
+int site_status_response_resolver(uint8_t *psource)
+{
+    return 0;
+}
+
 int protocol_resolver(uint8_t *psource,int length)
 {
     its_header *header = NULL;
     header = (its_header *)psource;
-
+    if(length == 0)
+        return 0;
+    printf("protocol resolver!\r\n");
     switch(header->type){
         case WATCHDOG:
             printf("watch dog message OK.\r\n");
@@ -97,13 +150,20 @@ int protocol_resolver(uint8_t *psource,int length)
             error_resolver(psource);
             break;
         case DWELL:
-
             break;
-
+        case LINCENE_VAKIDATION:
+            licence_validation_response_resolver(psource);
+            break;
+        case SITE_STATUS:
+            site_status_response_resolver(psource);
+            break;
+        case STRATEGIC_MONITOR:
+            break;
+        case DETECTOR_COUNT:
+            break;
         default:
-            printf("message type: %d \r\n",header->type);
             break;
     }
-
+    printf("message type: %d \r\n",header->type);
     return 0;
 }

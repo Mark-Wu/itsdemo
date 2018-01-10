@@ -54,7 +54,12 @@ int recv_msg(int sockfd,uint8_t *buffer,size_t max_size){
                     if (nread < (header->length + 2)){
                         continue;
                     }
-                    printf(" have received total frame .\r\n ");
+                    printf(" have received total frame :%d .\r\n ",nread);
+                    int i = 0;
+                    if(nread < 5)
+                        for( i = 0; i < nread; i++ )
+                            printf(" %02X",buffer[i]);
+                        printf("\r\n");
                     break;
                 }
             }

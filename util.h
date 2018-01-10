@@ -10,8 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define     MAX_SIZE    1024
-#define FILE_BUFFER_MAXLEN 1024*1024
+
+
+#define     FILE_BUFFER_MAXLEN  1024*1024
 
 
 
@@ -22,6 +23,7 @@ typedef struct {
     char server[64];        /* ip or domain */
     int port;               /* server port number */
 } global_configs;
+
 
 /*
  输入:工作路径
